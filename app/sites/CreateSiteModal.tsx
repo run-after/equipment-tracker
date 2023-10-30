@@ -1,4 +1,4 @@
-import { MouseEventHandler, FormEvent } from "react";
+import { MouseEventHandler, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { doc, setDoc } from "firebase/firestore";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -69,12 +69,54 @@ export default function CreateNewSite({ onClose }: ICreateNewSite) {
   // Access contexts
   const { db } = useFirebase();
 
+  const [errors, setErrors] = useState<string[]>([]);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Deconstruct form
     const { GLC, address1, address2, city, state, zip, assignee } =
       e.currentTarget;
+
+    // Temp error array
+    let err: string[] = [];
+
+    // Run through required inputs and add error if not present
+    if (!GLC.value) {
+      err = [...err, "GLC"];
+    } else {
+      err = err.filter((e) => e !== "GLC");
+    }
+
+    if (!address1.value) {
+      err = [...err, "address1"];
+    } else {
+      err = err.filter((e) => e !== "address1");
+    }
+
+    if (!city.value) {
+      err = [...err, "city"];
+    } else {
+      err = err.filter((e) => e !== "city");
+    }
+
+    if (!zip.value) {
+      err = [...err, "zip"];
+    } else {
+      err = err.filter((e) => e !== "zip");
+    }
+
+    if (!assignee.value) {
+      err = [...err, "assignee"];
+    } else {
+      err = err.filter((e) => e !== "assignee");
+    }
+
+    // Set error state
+    if (err.length) {
+      setErrors(err);
+      return;
+    }
 
     try {
       await setDoc(doc(db, "sites", GLC.value), {
@@ -114,16 +156,35 @@ export default function CreateNewSite({ onClose }: ICreateNewSite) {
         <div className="p-4">
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-            <div className="flex flex-col">
-              <label htmlFor="GLC">GLC</label>
-              <input name="GLC" className="bg-black border rounded p-2" />
+            <div className={`flex flex-col`}>
+              <label
+                htmlFor="GLC"
+                className={errors.includes("GLC") ? " text-red-500" : ""}
+              >
+                GLC
+              </label>
+              <input
+                required
+                name="GLC"
+                className={`bg-black border rounded p-2 ${
+                  errors.includes("GLC") ? " border-red-500" : ""
+                }`}
+              />
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex flex-col">
-                <label htmlFor="address1">Address line 1</label>
+                <label
+                  htmlFor="address1"
+                  className={errors.includes("address1") ? " text-red-500" : ""}
+                >
+                  Address line 1
+                </label>
                 <input
+                  required
                   name="address1"
-                  className="bg-black border rounded p-2"
+                  className={`bg-black border rounded p-2 ${
+                    errors.includes("address1") ? " border-red-500" : ""
+                  }`}
                 />
               </div>
               <div className="flex flex-col">
@@ -135,8 +196,19 @@ export default function CreateNewSite({ onClose }: ICreateNewSite) {
               </div>
               <div className="flex gap-2">
                 <div className="flex flex-col flex-1">
-                  <label htmlFor="city">City</label>
-                  <input name="city" className="bg-black border rounded p-2" />
+                  <label
+                    htmlFor="city"
+                    className={errors.includes("city") ? " text-red-500" : ""}
+                  >
+                    City
+                  </label>
+                  <input
+                    required
+                    name="city"
+                    className={`bg-black border rounded p-2 ${
+                      errors.includes("city") ? " border-red-500" : ""
+                    }`}
+                  />
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="state">State</label>
@@ -154,14 +226,36 @@ export default function CreateNewSite({ onClose }: ICreateNewSite) {
                   </select>
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="zip">Zip code</label>
-                  <input name="zip" className="bg-black border rounded p-2" />
+                  <label
+                    htmlFor="zip"
+                    className={errors.includes("zip") ? " text-red-500" : ""}
+                  >
+                    Zip code
+                  </label>
+                  <input
+                    required
+                    name="zip"
+                    className={`bg-black border rounded p-2 ${
+                      errors.includes("zip") ? " border-red-500" : ""
+                    }`}
+                  />
                 </div>
               </div>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="assignee">Assignee</label>
-              <input name="assignee" className="bg-black border rounded p-2" />
+              <label
+                htmlFor="assignee"
+                className={errors.includes("assignee") ? " text-red-500" : ""}
+              >
+                Assignee
+              </label>
+              <input
+                required
+                name="assignee"
+                className={`bg-black border rounded p-2 ${
+                  errors.includes("GLC") ? " border-red-500" : ""
+                }`}
+              />
             </div>
             <button className="p-4 rounded bg-gray-600 hover:bg-gray-700 mt-8">
               Submit

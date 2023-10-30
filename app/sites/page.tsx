@@ -61,11 +61,25 @@ export default function Sites() {
       </button>
       <div>
         <h1 className="text-xl font-bold pb-4">Sites</h1>
-        <ul className="flex flex-col gap-2">
+        <ul className="space-y-2">
+          <li className="border rounded p-2 w-full">
+            <div className="grid grid-cols-[1fr,1fr,auto] gap-2 font-bold">
+              <span>GLC</span>
+              <span>Address</span>
+              <span className="mr-6">Assignee</span>
+            </div>
+          </li>
           {sites.map((site) => (
             <li key={site.GLC} className="border rounded p-2">
-              <a href={`/sites/${site.GLC}`} className="hover:underline">
-                {site.GLC}
+              <a
+                href={`/sites/${site.GLC}`}
+                className="hover:underline gap-2 grid grid-cols-[1fr,1fr,auto]"
+              >
+                <span>{site.GLC}</span>
+                <span>
+                  {site.address1} {site.address2} {site.city} {site.zip}
+                </span>
+                <span>{site.assignee}</span>
               </a>
             </li>
           ))}
@@ -75,3 +89,6 @@ export default function Sites() {
     </main>
   );
 }
+
+// TODO: will need to paginate for when more sites are added
+// TODO: filter results by text typed or assignee

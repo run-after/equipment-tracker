@@ -71,7 +71,7 @@ export default function Equipment() {
           {equip.map((equip) => (
             <li key={equip.id} className="border rounded p-2">
               <a
-                href={`/sites/${equip.id}`}
+                href={`/equipment/${equip.id}`}
                 className="hover:underline gap-2 grid grid-cols-3"
               >
                 <span>{equip.id}</span>

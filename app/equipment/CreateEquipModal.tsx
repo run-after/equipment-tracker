@@ -114,10 +114,8 @@ export default function CreateNewEquip({ onClose }: ICreateNewEquipment) {
         site: site.value,
         location: location.value,
       });
-
       // TODO: Figure out how to not have to pass something in
       onClose(make);
-
       router.replace(`/sites/${ID.value}`);
     } catch (error) {
       console.log(error);
@@ -227,7 +225,7 @@ export default function CreateNewEquip({ onClose }: ICreateNewEquipment) {
               </div>
             </div>
 
-            <button className="p-4 rounded bg-gray-600 hover:bg-gray-700 mt-8">
+            <button className="p-4 rounded bg-gray-600 hover:bg-gray-700 mt-4">
               Submit
             </button>
           </form>
